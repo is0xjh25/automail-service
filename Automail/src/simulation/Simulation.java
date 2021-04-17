@@ -1,5 +1,10 @@
 package simulation;
 
+import automail.Automail;
+import automail.MailItem;
+import automail.MailPool;
+import automail.ModemHelper;
+import com.unimelb.swen30006.wifimodem.WifiModem;
 import exceptions.ExcessiveDeliveryException;
 import exceptions.ItemTooHeavyException;
 import exceptions.MailAlreadyDeliveredException;
@@ -9,12 +14,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
-
-import com.unimelb.swen30006.wifimodem.WifiModem;
-
-import automail.Automail;
-import automail.MailItem;
-import automail.MailPool;
 
 /**
  * This class simulates the behaviour of AutoMail
@@ -32,7 +31,7 @@ public class Simulation {
     private static double total_delay = 0;
     private static WifiModem wModem = null;
 
-    public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException {
+	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException {
     	
     	/** Load properties for simulation based on either default or a properties file.**/
     	Properties automailProperties = setUpProperties();
@@ -73,7 +72,8 @@ public class Simulation {
          * This code section is for running a simulation
          */
         /* Instantiate MailPool and Automail */
-     	MailPool mailPool = new MailPool(NUM_ROBOTS);
+		ModemHelper modemHelper = new ModemHelper(wModem);
+     	MailPool mailPool = new MailPool(NUM_ROBOTS, CHARGE_THRESHOLD, modemHelper);
         Automail automail = new Automail(mailPool, new ReportDelivery(), NUM_ROBOTS);
         MailGenerator mailGenerator = new MailGenerator(MAIL_TO_CREATE, MAIL_MAX_WEIGHT, mailPool, seedMap);
         

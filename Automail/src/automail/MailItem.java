@@ -19,6 +19,8 @@ public class MailItem {
     /** The weight in grams of the mail item */
     protected final int weight;
 
+    protected Charge charge;
+
     /**
      * Constructor for a MailItem
      * @param dest_floor the destination floor intended for this mail item
@@ -72,7 +74,15 @@ public class MailItem {
 	static private int count = 0;
 	static private Map<Integer, Integer> hashMap = new TreeMap<Integer, Integer>();
 
-	@Override
+    public Charge getCharge() {
+        return charge;
+    }
+
+    public void setCharge(Charge charge) {
+        this.charge = charge;
+    }
+
+    @Override
 	public int hashCode() {
 		Integer hash0 = super.hashCode();
 		Integer hash = hashMap.get(hash0);

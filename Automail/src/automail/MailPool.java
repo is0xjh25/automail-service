@@ -16,10 +16,12 @@ public class MailPool {
 
 	private class Item {
 		int destination;
+		boolean priority;
 		MailItem mailItem;
 		// Use stable sort to keep arrival time relative positions
 		
 		public Item(MailItem mailItem) {
+			priority = false;
 			destination = mailItem.getDestFloor();
 			this.mailItem = mailItem;
 		}
@@ -37,24 +39,73 @@ public class MailPool {
 			return order;
 		}
 	}
+
+	public class ItemComparatorPriority implements Comparator<Item> {
+		@Override
+		public int compare(Item i1, Item i2) {
+
+			int order = 0;
+
+			if (i1.priority && !i2.priority) {
+				order = 1;
+			} else if (!i1.priority && i2.priority == true) {
+				order = -1;
+			} else {
+				if (i1.destination < i2.destination) {
+					order = 1;
+				} else if (i1.destination > i2.destination) {
+					order = -1;
+				}
+			}
+			return order;
+		}
+	}
 	
 	private LinkedList<Item> pool;
 	private LinkedList<Robot> robots;
+	private Charger charger;
+	private double chargeThreshold;
 
-	public MailPool(int nrobots){
+	public MailPool(int nrobots, double chargeThreshold, ModemHelper modemHelper){
 		// Start empty
 		pool = new LinkedList<Item>();
 		robots = new LinkedList<Robot>();
+		this.chargeThreshold = chargeThreshold;
+
+		if (chargeThreshold > 0) {
+			charger = new Charger(modemHelper);
+		} else {
+			charger = null;
+		}
 	}
+
+
+
 
 	/**
      * Adds an item to the mail pool
      * @param mailItem the mail item being added.
      */
 	public void addToPool(MailItem mailItem) {
+
 		Item item = new Item(mailItem);
+		if (chargeThreshold > 0) {
+			double estimateCharge = charger.initialCharge(mailItem);
+			if (estimateCharge >= chargeThreshold) {
+				item.priority = true;
+			}
+		}
+
 		pool.add(item);
-		pool.sort(new ItemComparator());
+		//pool.sort(new ItemComparator());
+		if (chargeThreshold > 0){
+			pool.sort(new ItemComparatorPriority());
+		} else {
+			pool.sort(new ItemComparator());
+		}
+
+
+
 	}
 	
 	
