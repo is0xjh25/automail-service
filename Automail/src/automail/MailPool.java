@@ -26,7 +26,8 @@ public class MailPool {
 			this.mailItem = mailItem;
 		}
 	}
-	
+
+	// Default comparator
 	public class ItemComparator implements Comparator<Item> {
 		@Override
 		public int compare(Item i1, Item i2) {
@@ -40,6 +41,7 @@ public class MailPool {
 		}
 	}
 
+	// Prior comparator
 	public class ItemComparatorPriority implements Comparator<Item> {
 		@Override
 		public int compare(Item i1, Item i2) {
@@ -47,9 +49,9 @@ public class MailPool {
 			int order = 0;
 
 			if (i1.priority && !i2.priority) {
-				order = 1;
-			} else if (!i1.priority && i2.priority == true) {
 				order = -1;
+			} else if (!i1.priority && i2.priority) {
+				order = 1;
 			} else {
 				if (i1.destination < i2.destination) {
 					order = 1;
@@ -72,15 +74,11 @@ public class MailPool {
 		robots = new LinkedList<Robot>();
 		this.chargeThreshold = chargeThreshold;
 
+		// The new feature would be applied
 		if (chargeThreshold > 0) {
 			charger = new Charger(modemHelper);
-		} else {
-			charger = null;
 		}
 	}
-
-
-
 
 	/**
      * Adds an item to the mail pool
@@ -89,23 +87,24 @@ public class MailPool {
 	public void addToPool(MailItem mailItem) {
 
 		Item item = new Item(mailItem);
+
 		if (chargeThreshold > 0) {
+			// Create a charge for the item
 			double estimateCharge = charger.initialCharge(mailItem);
+			// Check the item whether is prior
 			if (estimateCharge >= chargeThreshold) {
 				item.priority = true;
 			}
 		}
 
 		pool.add(item);
-		//pool.sort(new ItemComparator());
+
+		// Sorted by different comparators depending on chargeThreshold
 		if (chargeThreshold > 0){
 			pool.sort(new ItemComparatorPriority());
 		} else {
 			pool.sort(new ItemComparator());
 		}
-
-
-
 	}
 	
 	
@@ -148,4 +147,7 @@ public class MailPool {
 		robots.add(robot);
 	}
 
+	public Charger getCharger() {
+		return charger;
+	}
 }

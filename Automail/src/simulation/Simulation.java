@@ -30,6 +30,7 @@ public class Simulation {
     private static ArrayList<MailItem> MAIL_DELIVERED;
     private static double total_delay = 0;
     private static WifiModem wModem = null;
+    private static StatisticsTracker statisticsTracker = new StatisticsTracker();
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException {
     	
@@ -94,7 +95,13 @@ public class Simulation {
 			}
             Clock.Tick();
         }
+
         printResults();
+
+        if (CHARGE_DISPLAY){
+			statisticsTracker.recordStatistic(mailPool.getCharger());
+			statisticsTracker.statisticsPrintOut();
+		}
         System.out.println(wModem.Turnoff());
     }
     
@@ -105,7 +112,7 @@ public class Simulation {
     	automailProperties.setProperty("Floors", "10");
     	automailProperties.setProperty("Mail_to_Create", "80");
     	automailProperties.setProperty("ChargeThreshold", "0");
-    	automailProperties.setProperty("ChargeDisplay", "false");
+    	automailProperties.setProperty("ChargeDisplay", "true");
     	
     	// Read properties
 		FileReader inStream = null;
@@ -150,7 +157,11 @@ public class Simulation {
     	public void deliver(MailItem deliveryItem){
     		if(!MAIL_DELIVERED.contains(deliveryItem)){
     			MAIL_DELIVERED.add(deliveryItem);
-                System.out.printf("T: %3d > Delivered(%4d) [%s]%n", Clock.Time(), MAIL_DELIVERED.size(), deliveryItem.toString());
+                if (CHARGE_DISPLAY) {
+					System.out.printf("T: %3d > Delivered(%4d) [%s %s]%n", Clock.Time(), MAIL_DELIVERED.size(), deliveryItem.toString(), deliveryItem.getCharge().toString());
+				} else {
+					System.out.printf("T: %3d > Delivered(%4d) [%s]%n", Clock.Time(), MAIL_DELIVERED.size(), deliveryItem.toString());
+				}
     			// Calculate delivery score
     			total_delay += calculateDeliveryDelay(deliveryItem);
     		}

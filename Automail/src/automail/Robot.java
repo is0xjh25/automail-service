@@ -89,6 +89,9 @@ public class Robot {
     		case DELIVERING:
     			if(current_floor == destination_floor){ // If already here drop off either way
                     /** Delivery complete, report this to the simulator! */
+                    if (mailPool.getCharger() != null) {
+                        mailPool.getCharger().finalCharge(deliveryItem);
+                    }
                     delivery.deliver(deliveryItem);
                     deliveryItem = null;
                     deliveryCounter++;

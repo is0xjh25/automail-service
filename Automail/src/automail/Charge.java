@@ -3,13 +3,13 @@ package automail;
 public class Charge {
 
     private double serviceFee;
-    private double activityCost;
+    private double activity;
     private double cost;
     private double charge;
 
-    public Charge(double serviceFee, double activityCost, double cost, double charge) {
+    public Charge(double serviceFee, double activity, double cost, double charge) {
         this.serviceFee = serviceFee;
-        this.activityCost = activityCost;
+        this.activity = activity;
         this.cost = cost;
         this.charge = charge;
     }
@@ -38,19 +38,16 @@ public class Charge {
         this.serviceFee = serviceFee;
     }
 
-    public double getActivityCost() {
-        return activityCost;
+    public double getActivity() {
+        return activity;
     }
 
-    public void setActivityCost(double activityCost) {
-        this.activityCost = activityCost;
+    public void setActivity(double activity) {
+        this.activity = activity;
     }
 
     @Override
     public String toString() {
-        return "| Charge: " + charge +
-                "| Cost: " + cost +
-                "| Fee: " + serviceFee +
-                "| Activity:" + activityCost;
+        return String.format("| Charge: %4.2f | Cost: %4.2f | Fee: %4.2f | Activity: %4.2f", charge, cost, serviceFee, activity);
     }
 }
