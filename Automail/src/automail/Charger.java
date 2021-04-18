@@ -12,7 +12,7 @@ public class Charger {
     private double totActivityCost;
     private double totServiceCost;
     private static HashMap<Integer, Double> serviceFeeRecords = new HashMap<>();
-    private ModemHelper modemHelper = new ModemHelper();
+    private ModemAdapter modemAdapter = new ModemAdapter();
 
     public Charger() {
         this.numDeliveredItem = 0;
@@ -55,7 +55,7 @@ public class Charger {
     }
 
     private double lookupServiceFee (int floor) {
-        double serviceFee = modemHelper.getServiceFee(floor);
+        double serviceFee = modemAdapter.getServiceFee(floor);
 
         if (serviceFee < 0 ) {
             totFailureLookups++;

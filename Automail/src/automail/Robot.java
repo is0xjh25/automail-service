@@ -48,7 +48,6 @@ public class Robot {
         this.mailPool = mailPool;
         this.receivedDispatch = false;
         this.deliveryCounter = 0;
-
         this.charger = new Charger();
     }
     

@@ -3,7 +3,6 @@ package simulation;
 import automail.Automail;
 import automail.MailItem;
 import automail.MailPool;
-import automail.ModemHelper;
 import com.unimelb.swen30006.wifimodem.WifiModem;
 import exceptions.ExcessiveDeliveryException;
 import exceptions.ItemTooHeavyException;
@@ -36,7 +35,7 @@ public class Simulation {
 
 	private static WifiModem wModem = null;
 
-    private static StatisticsTracker statisticsTracker = new StatisticsTracker();
+    private static StatisticsTracker statisticsTracker = null;
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException {
     	
@@ -103,10 +102,12 @@ public class Simulation {
 
         printResults();
 
-        if (CHARGE_DISPLAY){
+        if (CHARGE_DISPLAY) {
+        	statisticsTracker = new StatisticsTracker();
 			statisticsTracker.recordStatistic(automail);
 			statisticsTracker.statisticsPrintOut();
 		}
+
         System.out.println(wModem.Turnoff());
     }
     
