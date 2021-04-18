@@ -1,6 +1,9 @@
 package simulation;
 
+import automail.Automail;
 import automail.Charger;
+import automail.MailPool;
+import automail.Robot;
 
 public class StatisticsTracker {
 
@@ -20,13 +23,21 @@ public class StatisticsTracker {
         this.totFailureLookups = 0;
     }
 
-    public void recordStatistic(Charger charger){
-        this.numDeliveredItem = charger.getNumDeliveredItem();
-        this.totBillableActivity = charger.getTotBillableActivity();
-        this.totActivityCost = charger.getTotActivityCost();
-        this.totServiceCost = charger.getTotServiceCost();
-        this.totSuccessLookups = charger.getTotSuccessLookups();
-        this.totFailureLookups = charger.getTotFailureLookups();
+    public void recordStatistic(Automail automail){
+        MailPool mailPool = automail.mailPool;
+        Robot[] robots = automail.robots;
+        for (Robot robot : robots){
+            Charger charger = robot.getCharger();
+            numDeliveredItem+= charger.getNumDeliveredItem();
+            totBillableActivity+= charger.getTotBillableActivity();
+            totActivityCost+= charger.getTotActivityCost();
+            totServiceCost+= charger.getTotServiceCost();
+            totSuccessLookups+= charger.getTotSuccessLookups();
+            totFailureLookups+= charger.getTotFailureLookups();
+        }
+        Charger centralCharger = mailPool.getCharger();
+        totSuccessLookups+= centralCharger.getTotSuccessLookups();
+        totFailureLookups+= centralCharger.getTotFailureLookups();
     }
 
     public void statisticsPrintOut() {

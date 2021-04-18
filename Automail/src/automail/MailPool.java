@@ -65,19 +65,17 @@ public class MailPool {
 	
 	private LinkedList<Item> pool;
 	private LinkedList<Robot> robots;
-	private Charger charger;
+	private Charger centralCharger;
 	private double chargeThreshold;
 
-	public MailPool(int nrobots, double chargeThreshold, ModemHelper modemHelper){
+	public MailPool(int nrobots, double chargeThreshold){
 		// Start empty
 		pool = new LinkedList<Item>();
 		robots = new LinkedList<Robot>();
 		this.chargeThreshold = chargeThreshold;
 
 		// The new feature would be applied
-		if (chargeThreshold > 0) {
-			charger = new Charger(modemHelper);
-		}
+		this.centralCharger = new Charger();
 	}
 
 	/**
@@ -88,13 +86,9 @@ public class MailPool {
 
 		Item item = new Item(mailItem);
 
-		if (chargeThreshold > 0) {
-			// Create a charge for the item
-			double estimateCharge = charger.initialCharge(mailItem);
-			// Check the item whether is prior
-			if (estimateCharge >= chargeThreshold) {
-				item.priority = true;
-			}
+		double estimateCharge = centralCharger.initialCharge(mailItem);
+		if (estimateCharge >= chargeThreshold) {
+			item.priority = true;
 		}
 
 		pool.add(item);
@@ -148,6 +142,6 @@ public class MailPool {
 	}
 
 	public Charger getCharger() {
-		return charger;
+		return centralCharger;
 	}
 }

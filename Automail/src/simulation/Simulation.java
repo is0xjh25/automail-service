@@ -29,7 +29,13 @@ public class Simulation {
     
     private static ArrayList<MailItem> MAIL_DELIVERED;
     private static double total_delay = 0;
-    private static WifiModem wModem = null;
+
+	public static WifiModem getwModem() {
+		return wModem;
+	}
+
+	private static WifiModem wModem = null;
+
     private static StatisticsTracker statisticsTracker = new StatisticsTracker();
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException {
@@ -73,8 +79,7 @@ public class Simulation {
          * This code section is for running a simulation
          */
         /* Instantiate MailPool and Automail */
-		ModemHelper modemHelper = new ModemHelper(wModem);
-     	MailPool mailPool = new MailPool(NUM_ROBOTS, CHARGE_THRESHOLD, modemHelper);
+     	MailPool mailPool = new MailPool(NUM_ROBOTS, CHARGE_THRESHOLD);
         Automail automail = new Automail(mailPool, new ReportDelivery(), NUM_ROBOTS);
         MailGenerator mailGenerator = new MailGenerator(MAIL_TO_CREATE, MAIL_MAX_WEIGHT, mailPool, seedMap);
         
@@ -99,7 +104,7 @@ public class Simulation {
         printResults();
 
         if (CHARGE_DISPLAY){
-			statisticsTracker.recordStatistic(mailPool.getCharger());
+			statisticsTracker.recordStatistic(automail);
 			statisticsTracker.statisticsPrintOut();
 		}
         System.out.println(wModem.Turnoff());

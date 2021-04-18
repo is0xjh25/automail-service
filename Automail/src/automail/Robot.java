@@ -27,6 +27,9 @@ public class Robot {
     private MailItem tube = null;
     
     private int deliveryCounter;
+
+
+    private Charger charger;
     
 
     /**
@@ -45,6 +48,8 @@ public class Robot {
         this.mailPool = mailPool;
         this.receivedDispatch = false;
         this.deliveryCounter = 0;
+
+        this.charger = new Charger();
     }
     
     /**
@@ -89,9 +94,7 @@ public class Robot {
     		case DELIVERING:
     			if(current_floor == destination_floor){ // If already here drop off either way
                     /** Delivery complete, report this to the simulator! */
-                    if (mailPool.getCharger() != null) {
-                        mailPool.getCharger().finalCharge(deliveryItem);
-                    }
+                    charger.finalCharge(deliveryItem);
                     delivery.deliver(deliveryItem);
                     deliveryItem = null;
                     deliveryCounter++;
@@ -175,5 +178,9 @@ public class Robot {
 		tube = mailItem;
 		if (tube.weight > INDIVIDUAL_MAX_WEIGHT) throw new ItemTooHeavyException();
 	}
+
+    public Charger getCharger() {
+        return charger;
+    }
 
 }

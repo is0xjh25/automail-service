@@ -11,34 +11,34 @@ public class Charger {
     private double totBillableActivity;
     private double totActivityCost;
     private double totServiceCost;
-    private HashMap<Integer, Double> serviceFeeRecords;
-    private ModemHelper modemHelper;
+    private static HashMap<Integer, Double> serviceFeeRecords = new HashMap<>();
+    private ModemHelper modemHelper = new ModemHelper();
 
-    public Charger(ModemHelper modemHelper) {
-        this.modemHelper = modemHelper;
+    public Charger() {
         this.numDeliveredItem = 0;
         this.totBillableActivity = 0;
         this.totActivityCost = 0;
         this.totServiceCost = 0;
         this.totSuccessLookups = 0;
         this.totFailureLookups = 0;
-        this.serviceFeeRecords = new HashMap<>();
     }
 
     public double initialCharge(MailItem mailItem) {
         double serviceFee = lookupServiceFee(mailItem.getDestFloor());
+
         double activity = mailItem.getDestFloor() * 5 * 2 + 0.1;
         double activityCost = activity * ACTIVITY_UNIT_PRICE;
         double cost = serviceFee + activityCost;
         double charge = cost * (1 + MARKUP_PERCENTAGE);
 
-        mailItem.setCharge(new Charge(serviceFee, activityCost, cost, charge));
+        mailItem.setCharge(new Charge(serviceFee, activity, cost, charge));
 
         return charge;
     }
 
     public void finalCharge(MailItem mailItem) {
         double serviceFee = lookupServiceFee(mailItem.getDestFloor());
+
         double activity =  mailItem.getCharge().getActivity();
         double activityCost = activity * ACTIVITY_UNIT_PRICE;
         double cost = serviceFee + activityCost;
