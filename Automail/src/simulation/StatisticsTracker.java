@@ -4,7 +4,11 @@ import automail.Automail;
 import automail.Charger;
 import automail.MailPool;
 import automail.Robot;
-
+/**
+ * If required, the statistics tracker would extract the statistics in charger and print them out.
+ *
+ * Written by Workshop16Team02 04/2021
+ */
 public class StatisticsTracker {
 
     private int numDeliveredItem;
@@ -14,6 +18,9 @@ public class StatisticsTracker {
     private int totSuccessLookups;
     private int totFailureLookups;
 
+    /**
+     * If the statistics is not expected in output, initialise the tracker by setting all attributes to 0.
+     */
     public StatisticsTracker() {
         this.numDeliveredItem = 0;
         this.totBillableActivity = 0;
@@ -23,7 +30,11 @@ public class StatisticsTracker {
         this.totFailureLookups = 0;
     }
 
-    public void recordStatistic(Automail automail){
+    /**
+     * The tracker loads the statistics stored in all chargers and add them up respectively.
+     * @param automail The tracker read the whole automail system in and read all chargers in it.
+     */
+    public void loadStatistic(Automail automail){
         MailPool mailPool = automail.mailPool;
         Robot[] robots = automail.robots;
         for (Robot robot : robots){
@@ -40,6 +51,9 @@ public class StatisticsTracker {
         totFailureLookups+= centralCharger.getTotFailureLookups();
     }
 
+    /**
+     * Print out the concluded statistics.
+     */
     public void statisticsPrintOut() {
         System.out.format("The total number of items delivered: %d%n", numDeliveredItem);
         System.out.format("The total billable activity: %4.2f%n", totBillableActivity);

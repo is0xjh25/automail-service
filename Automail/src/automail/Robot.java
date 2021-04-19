@@ -8,6 +8,8 @@ import simulation.IMailDelivery;
 
 /**
  * The robot delivers mail!
+ *
+ * Modified by Workshop16Team02 04/2021
  */
 public class Robot {
 	
@@ -28,14 +30,15 @@ public class Robot {
     
     private int deliveryCounter;
 
-
+    // Each robot is equipped with a charger to calculate final charges for their delivery
+    // and record the charges.
     private Charger charger;
     
 
     /**
      * Initiates the robot's location at the start to be at the mailroom
      * also set it to be waiting for mail.
-     * @param behaviour governs selection of mail items for delivery and behaviour on priority arrivals
+     * @param number governs selection of mail items for delivery and behaviour on priority arrivals
      * @param delivery governs the final delivery
      * @param mailPool is the source of mail items
      */
@@ -92,7 +95,7 @@ public class Robot {
                 break;
     		case DELIVERING:
     			if(current_floor == destination_floor){ // If already here drop off either way
-                    /** Delivery complete, report this to the simulator! */
+                    /** Delivery complete, calculate the final charge and report this to the simulator! */
                     charger.finalCharge(deliveryItem);
                     delivery.deliver(deliveryItem);
                     deliveryItem = null;
@@ -178,6 +181,10 @@ public class Robot {
 		if (tube.weight > INDIVIDUAL_MAX_WEIGHT) throw new ItemTooHeavyException();
 	}
 
+    /**
+     * For other class to access each robot's charger
+     * @return The robot's charger
+     */
     public Charger getCharger() {
         return charger;
     }

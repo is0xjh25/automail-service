@@ -16,6 +16,8 @@ import java.util.Properties;
 
 /**
  * This class simulates the behaviour of AutoMail
+ *
+ * Modified by Workshop16Team02 04/2021
  */
 public class Simulation {
 	private static int NUM_ROBOTS;
@@ -25,17 +27,21 @@ public class Simulation {
     /** Constant for the mail generator */
     private static int MAIL_TO_CREATE;
     private static int MAIL_MAX_WEIGHT;
-    
     private static ArrayList<MailItem> MAIL_DELIVERED;
     private static double total_delay = 0;
 
-	public static WifiModem getwModem() {
-		return wModem;
-	}
+    // The statistics tracker is for statistics conclusion
+	private static StatisticsTracker statisticsTracker = null;
 
 	private static WifiModem wModem = null;
 
-    private static StatisticsTracker statisticsTracker = null;
+	/**
+	 * For the modem adaptor to get the external wifi modem
+	 * @return the WifiModem
+	 */
+	public static WifiModem getwModem() {
+		return wModem;
+	}
 
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException {
     	
@@ -102,9 +108,10 @@ public class Simulation {
 
         printResults();
 
+        // If charge-display is required, then instantiate the statistics tracker and print the data out
         if (CHARGE_DISPLAY) {
         	statisticsTracker = new StatisticsTracker();
-			statisticsTracker.recordStatistic(automail);
+			statisticsTracker.loadStatistic(automail);
 			statisticsTracker.statisticsPrintOut();
 		}
 
@@ -166,6 +173,7 @@ public class Simulation {
                 if (CHARGE_DISPLAY) {
 					System.out.printf("T: %3d > Delivered(%4d) [%s %s]%n", Clock.Time(), MAIL_DELIVERED.size(), deliveryItem.toString(), deliveryItem.getCharge().toString());
 				} else {
+                	// Add the charge statistics to the log output
 					System.out.printf("T: %3d > Delivered(%4d) [%s]%n", Clock.Time(), MAIL_DELIVERED.size(), deliveryItem.toString());
 				}
     			// Calculate delivery score

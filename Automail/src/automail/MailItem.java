@@ -7,6 +7,8 @@ import java.util.TreeMap;
 
 /**
  * Represents a mail item
+ *
+ * Modified by Workshop16Team02 04/2021
  */
 public class MailItem {
 	
@@ -18,7 +20,7 @@ public class MailItem {
     protected final int arrival_time;
     /** The weight in grams of the mail item */
     protected final int weight;
-
+    /** The Charge object which records the mail item's service fee, activity units, cost, and final charge */
     protected Charge charge;
 
     /**
@@ -67,20 +69,28 @@ public class MailItem {
     *
     * @return the weight of the mail item
     */
-   public int getWeight(){
+    public int getWeight(){
        return weight;
    }
-   
-	static private int count = 0;
-	static private Map<Integer, Integer> hashMap = new TreeMap<Integer, Integer>();
 
+    /**
+     *
+     * @return the Charge of the mail item
+     */
     public Charge getCharge() {
         return charge;
     }
 
+    /**
+     *
+     * @param charge set the charge of the mail item to the given value
+     */
     public void setCharge(Charge charge) {
         this.charge = charge;
     }
+   
+	static private int count = 0;
+	static private Map<Integer, Integer> hashMap = new TreeMap<Integer, Integer>();
 
     @Override
 	public int hashCode() {
