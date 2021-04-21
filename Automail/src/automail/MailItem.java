@@ -8,7 +8,7 @@ import java.util.TreeMap;
 /**
  * Represents a mail item
  *
- * Modified by Workshop16Team02 04/2021
+ * Modified by Workshop16-Team02 04/2021
  */
 public class MailItem {
 	
@@ -20,6 +20,8 @@ public class MailItem {
     protected final int arrival_time;
     /** The weight in grams of the mail item */
     protected final int weight;
+    /** The potential delay for each mail item */
+    protected int delay;
     /** The Charge object which records the mail item's service fee, activity units, cost, and final charge */
     protected Charge charge;
 
@@ -81,12 +83,30 @@ public class MailItem {
         return charge;
     }
 
+
+    /**
+     *
+     * @param delay set the delay time of the mail item
+     */
+    public void setDelay(int delay) {
+        this.delay = delay;
+    }
+
     /**
      *
      * @param charge set the charge of the mail item to the given value
      */
     public void setCharge(Charge charge) {
         this.charge = charge;
+    }
+
+    /**
+     * Calculate the time spent on delivery
+     * @param currentTime the time when delivery finished
+     */
+    public void computeDelay(int currentTime) {
+        int delay = currentTime - this.getArrivalTime();
+        this.setDelay(delay);
     }
    
 	static private int count = 0;

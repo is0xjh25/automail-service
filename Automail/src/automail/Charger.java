@@ -7,11 +7,15 @@ import java.util.HashMap;
  * It also stores configurable variable used for calculating charge,
  * and keeps track of the statistics of the whole delivery process.
  *
- * Written by Workshop16Team02 04/2021
+ * Written by Workshop16-Team02 04/2021
  */
 public class Charger {
+    // Configurable parameters for charge calculating
     private static double ACTIVITY_UNIT_PRICE = 0.224;
     private static double MARKUP_PERCENTAGE = 0.059;
+
+    // Default value for lookup service fee activity
+    private static double LOOKUP_FEE_ACTIVITY = 0.1;
     private int numDeliveredItem;
     private int totSuccessLookups;
     private int totFailureLookups;
@@ -20,6 +24,7 @@ public class Charger {
     private double totServiceCost;
     // A hashmap  is created to store past service fees, in case a lookup failure happens
     private static HashMap<Integer, Double> serviceFeeRecords = new HashMap<>();
+    // Used to look up the service fee from the Wifi Modem
     private ModemAdapter modemAdapter = new ModemAdapter();
 
     /**
@@ -42,7 +47,10 @@ public class Charger {
     public double initialCharge(MailItem mailItem) {
         // Calculate the charge
         double serviceFee = lookupServiceFee(mailItem.getDestFloor());
-        double activity = mailItem.getDestFloor() * 5 * 2 + 0.1;
+        // When calculating, subtract the destination floor by 1 to simulate counting from 1st floor
+        double activity = (mailItem.getDestFloor() - 1) * 5 * 2 + LOOKUP_FEE_ACTIVITY;
+        // Add the lookup fee activity no matter what the lookup result is
+        totBillableActivity += LOOKUP_FEE_ACTIVITY;
         double activityCost = activity * ACTIVITY_UNIT_PRICE;
         double cost = serviceFee + activityCost;
         double charge = cost * (1 + MARKUP_PERCENTAGE);
@@ -81,11 +89,14 @@ public class Charger {
     private double lookupServiceFee (int floor) {
         double serviceFee = modemAdapter.getServiceFee(floor);
 
+        // Handles lookup success and failure
+        // If the lookup fails, search the service fee records to use the last value
         if (serviceFee < 0 ) {
             totFailureLookups++;
             if (serviceFeeRecords.containsKey(floor)) {
                 serviceFee = serviceFeeRecords.get(floor);
             } else {
+                // If the destination floor is not in the records, then set the service fee to 0 to prevent overcharging
                 serviceFee = 0;
             }
         } else {
@@ -96,52 +107,54 @@ public class Charger {
         return serviceFee;
     }
 
+    /**
+     *
+     * @return the number of delivered item
+     */
     public int getNumDeliveredItem() {
         return numDeliveredItem;
     }
 
-    public void setNumDeliveredItem(int numDeliveredItem) {
-        this.numDeliveredItem = numDeliveredItem;
-    }
-
+    /**
+     *
+     * @return get the total billable activity units
+     */
     public double getTotBillableActivity() {
         return totBillableActivity;
     }
 
-    public void setTotBillableActivity(double totBillableActivity) {
-        this.totBillableActivity = totBillableActivity;
-    }
-
+    /**
+     *
+     * @return get the total activity cost
+     */
     public double getTotActivityCost() {
         return totActivityCost;
     }
 
-    public void setTotActivityCost(double totActivityCost) {
-        this.totActivityCost = totActivityCost;
-    }
-
+    /**
+     *
+     * @return get total service cost
+     */
     public double getTotServiceCost() {
         return totServiceCost;
     }
 
-    public void setTotServiceCost(double totServiceCost) {
-        this.totServiceCost = totServiceCost;
-    }
-
+    /**
+     *
+     * @return get the total success lookups
+     */
     public int getTotSuccessLookups() {
         return totSuccessLookups;
     }
 
-    public void setTotSuccessLookups(int totSuccessLookups) {
-        this.totSuccessLookups = totSuccessLookups;
-    }
 
+    /**
+     *
+     * @return get the total failure lookups
+     */
     public int getTotFailureLookups() {
         return totFailureLookups;
     }
 
-    public void setTotFailureLookups(int totFailureLookups) {
-        this.totFailureLookups = totFailureLookups;
-    }
 }
 

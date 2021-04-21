@@ -4,7 +4,7 @@ package automail;
  * Charge exists in every mailItem.
  * It records the mail item's service fee, activity units, cost, and final charge.
  *
- * Written by Workshop16Team02 04/2021
+ * Written by Workshop16-Team02 04/2021
  */
 
 public class Charge {

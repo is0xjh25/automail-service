@@ -7,7 +7,7 @@ import simulation.Simulation;
  * Modem Adapter is a tool for Charger to get given floor's service fee from the WifiModem.
  * It avoids direct interaction between Charger and WifiModem.
  *
- * Written by Workshop16Team02 04/2021
+ * Written by Workshop16-Team02 04/2021
  */
 public class ModemAdapter {
 

@@ -7,7 +7,7 @@ import automail.Robot;
 /**
  * If required, the statistics tracker would extract the statistics in charger and print them out.
  *
- * Written by Workshop16Team02 04/2021
+ * Written by Workshop16-Team02 04/2021
  */
 public class StatisticsTracker {
 
@@ -47,6 +47,7 @@ public class StatisticsTracker {
             totFailureLookups+= charger.getTotFailureLookups();
         }
         Charger centralCharger = mailPool.getCharger();
+        totBillableActivity+= centralCharger.getTotBillableActivity();
         totSuccessLookups+= centralCharger.getTotSuccessLookups();
         totFailureLookups+= centralCharger.getTotFailureLookups();
     }

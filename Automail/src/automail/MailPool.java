@@ -11,7 +11,7 @@ import exceptions.ItemTooHeavyException;
  * if a robot returns with some undelivered items - these are added back to the MailPool.
  * The data structure and algorithms used in the MailPool is your choice.
  *
- * Modified by Workshop16Team02 04/2021
+ * Modified by Workshop16-Team02 04/2021
  */
 public class MailPool {
 
@@ -96,7 +96,7 @@ public class MailPool {
 
 		Item item = new Item(mailItem);
 
-		// The central charger estimates the charge of the item no matter of the threshold
+		// The central charger estimates the charge of the item regardless of the value of threshold
 		// and assigns it priority if it exceeds the charge threshold
 		double estimateCharge = centralCharger.initialCharge(mailItem);
 		if (estimateCharge >= chargeThreshold) {

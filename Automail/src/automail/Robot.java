@@ -9,7 +9,7 @@ import simulation.IMailDelivery;
 /**
  * The robot delivers mail!
  *
- * Modified by Workshop16Team02 04/2021
+ * Modified by Workshop16-Team02 04/2021
  */
 public class Robot {
 	
@@ -97,6 +97,11 @@ public class Robot {
     			if(current_floor == destination_floor){ // If already here drop off either way
                     /** Delivery complete, calculate the final charge and report this to the simulator! */
                     charger.finalCharge(deliveryItem);
+
+                    // Based on the time delivered, decide whether the item is delayed
+                    int currentTime = Clock.Time();
+                    deliveryItem.computeDelay(currentTime);
+
                     delivery.deliver(deliveryItem);
                     deliveryItem = null;
                     deliveryCounter++;

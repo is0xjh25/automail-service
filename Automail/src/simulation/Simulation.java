@@ -17,7 +17,7 @@ import java.util.Properties;
 /**
  * This class simulates the behaviour of AutoMail
  *
- * Modified by Workshop16Team02 04/2021
+ * Modified by Workshop16-Team02 04/2021
  */
 public class Simulation {
 	private static int NUM_ROBOTS;
@@ -125,7 +125,7 @@ public class Simulation {
     	automailProperties.setProperty("Floors", "10");
     	automailProperties.setProperty("Mail_to_Create", "80");
     	automailProperties.setProperty("ChargeThreshold", "0");
-    	automailProperties.setProperty("ChargeDisplay", "true");
+    	automailProperties.setProperty("ChargeDisplay", "false");
     	
     	// Read properties
 		FileReader inStream = null;
